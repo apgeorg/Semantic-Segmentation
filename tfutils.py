@@ -1,6 +1,5 @@
 import tensorflow as tf
 
-# custom init with the seed set to 0 by default
 def custom_init(stddev):
     return tf.random_normal_initializer(stddev=stddev)
 
