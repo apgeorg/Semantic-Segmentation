@@ -5,7 +5,7 @@ import helper
 import warnings
 from distutils.version import LooseVersion
 import project_tests as tests
-
+import tfutils as utils
 
 # Check TensorFlow Version
 assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)
@@ -56,45 +56,30 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     :return: The Tensor for the last layer of output
     """
 
-    weights_initializer_stddev = 0.01
-    weights_regularized_l2 = 1e-3
-
     # Convolutional 1x1 to mantain space information.
-    conv_1x1_of_7 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, padding='same',
-                                     kernel_initializer=tf.random_normal_initializer(stddev=weights_initializer_stddev),
-                                     kernel_regularizer=tf.contrib.layers.l2_regularizer(weights_regularized_l2),
-                                     name='conv_1x1_of_7')
+    conv1d_7 = utils.conv_1x1(vgg_layer7_out, num_classes, 'conv1d_7')
+
     # Upsample deconvolution x 2
-    first_upsamplex2 = tf.layers.conv2d_transpose(conv_1x1_of_7, num_classes, kernel_size=4, strides=(2, 2), padding='same',
-                                                  kernel_initializer=tf.random_normal_initializer(stddev=weights_initializer_stddev),
-                                                  kernel_regularizer=tf.contrib.layers.l2_regularizer(weights_regularized_l2),
-                                                  name='first_upsamplex2')
+    up1 = utils.upsample(conv1d_7, num_classes , kernel_size=4, stride=(2, 2), name='up1')
 
-    conv_1x1_of_4 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size=1, padding='same',
-                                     kernel_initializer = tf.random_normal_initializer(stddev=weights_initializer_stddev),
-                                     kernel_regularizer= tf.contrib.layers.l2_regularizer(weights_regularized_l2),
-                                     name='conv_1x1_of_4')
+    conv1d_4 = utils.conv_1x1(vgg_layer4_out, num_classes, 'conv1d_4')
+
     # Adding skip layer.
-    first_skip = tf.add(first_upsamplex2, conv_1x1_of_4, name='first_skip')
+    skip1 = tf.add(up1, conv1d_4, name='skip1')
+
     # Upsample deconvolutions x 2.
-    second_upsamplex2 = tf.layers.conv2d_transpose(first_skip, num_classes, kernel_size=4, strides= (2, 2), padding= 'same',
-                                                   kernel_initializer = tf.random_normal_initializer(stddev=weights_initializer_stddev),
-                                                   kernel_regularizer= tf.contrib.layers.l2_regularizer(weights_regularized_l2),
-                                                   name='second_upsamplex2')
+    up2 = utils.upsample(skip1, num_classes, kernel_size=4, stride=(2, 2), name='up2')
 
-    conv_1x1_of_3 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size=1, padding='same',
-                                     kernel_initializer=tf.random_normal_initializer(stddev=weights_initializer_stddev),
-                                     kernel_regularizer=tf.contrib.layers.l2_regularizer(weights_regularized_l2),
-                                     name='conv_1x1_of_3')
+    conv1d_3 = utils.conv_1x1(vgg_layer3_out, num_classes, 'conv1d_3')
+
     # Adding skip layer.
-    second_skip = tf.add(second_upsamplex2, conv_1x1_of_3, name='second_skip')
-    # Upsample deconvolution x 8.
-    third_upsamplex8 = tf.layers.conv2d_transpose(second_skip, num_classes, kernel_size=16, strides=(8, 8), padding='same',
-                                                  kernel_initializer=tf.random_normal_initializer(stddev=weights_initializer_stddev),
-                                                  kernel_regularizer=tf.contrib.layers.l2_regularizer(weights_regularized_l2),
-                                                  name='third_upsamplex8')
+    skip2 = tf.add(up2, conv1d_3, name='skip2')
 
-    return third_upsamplex8
+    # Upsample deconvolution x 8.
+    up3 = utils.upsample(skip2, num_classes, kernel_size=16, stride=(8, 8), name='up3')
+
+    return up3
+
 tests.test_layers(layers)
 
 
