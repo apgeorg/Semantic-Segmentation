@@ -1,4 +1,5 @@
 import os.path
+import numpy as np
 import time
 import tensorflow as tf
 import helper
@@ -123,18 +124,16 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     """
     sess.run(tf.global_variables_initializer())
     print('Training...'.format(epochs))
-    print()
     for epoch in range(epochs):
         start_time = time.time()
         print("Epoch {}/{}".format(epoch+1, epochs))
-        loss_log = []
+        logloss = []
         for image, label in get_batches_fn(batch_size):
             _, loss = sess.run([train_op, cross_entropy_loss],
                                feed_dict={input_image: image, correct_label: label, keep_prob: 0.5, learning_rate: 0.00001})
-            loss_log.append('{:3f}'.format(loss))
+            logloss.append(loss)
         end_time = time.time()
-        print("{}s".format(int(end_time - start_time)))
-        print(loss_log)
+        print("{}s - loss = {:.3f}".format(int(end_time - start_time)), np.mean(logloss))
         print()
     print('Training finished.')
 
@@ -169,7 +168,6 @@ def run():
         correct_label = tf.placeholder(tf.int32, [None, None, None, num_classes], name='correct_label')
         learning_rate = tf.placeholder(tf.float32, name='learning_rate')
 
-
         # Getting layers from vgg.
         input_image, keep_prob, layer3_out, layer4_out, layer7_out = load_vgg(sess, vgg_path)
 
@@ -180,8 +178,8 @@ def run():
         logits, train_op, cross_entropy_loss = optimize(layer_output, correct_label, learning_rate, num_classes)
 
         # Train NN using the train_nn function
-        epochs = 1
-        batch_size = 5
+        epochs = 15
+        batch_size = 16
         saver = tf.train.Saver()
 
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
