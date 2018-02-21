@@ -133,7 +133,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
                                feed_dict={input_image: image, correct_label: label, keep_prob: 0.5, learning_rate: 0.00001})
             logloss.append(loss)
         end_time = time.time()
-        print("{}s - loss = {:.3f}".format(int(end_time - start_time)), np.mean(logloss))
+        print("{}s - loss = {:.3f}".format(int(end_time - start_time), np.mean(logloss)))
         print()
     print('Training finished.')
 
