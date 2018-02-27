@@ -33,7 +33,7 @@ As we can see, the average loss is below 0.19 after 20 epochs and 0.05 after 40 
 
 ## Results
 
-Below are a few sample images from the output of the FCN, with the segmentation class overlaid upon the original image in green. Further images can be found under runs/. 
+Below are a few sample images from the output of the FCN, with the segmentation class overlaid upon the original image in green. Further images can be found under *runs* folder. 
 
 ![Road 1][road1]
 ![Road 2][road2]
