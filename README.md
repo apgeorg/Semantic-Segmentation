@@ -1,4 +1,4 @@
-[fcn]: ./images/fcn_segmentation.png "Structure of a Fully Convolutional Network Architecture" "=200x100"
+[fcn]: ./images/fcn_segmentation.png "Structure of a Fully Convolutional Network Architecture"
 [loss20]: ./images/loss_ep20.png "Loss Curvature (epochs 20)" 
 [loss40]: ./images/loss_ep40.png "Loss Curvature (epochs 40)"
 [road1]: ./images/um_000015.png "Road 1" 
