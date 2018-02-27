@@ -15,7 +15,7 @@ In this project, we are labelling the pixels of a road in images using a Fully C
 
 The model architecture is based on [1] which is an proven architecture (see figure below) for semantic segmentation. 
 
-![Structure of a Fully Convolutional Network Architecture][fcn]
+![Structure of a Fully Convolutional Network Architecture][fcn =100x20]
 
 A pre-trained VGG16 network was converted to a FCN by converting the final fully connected layer to a 1x1 convolution and setting the depth equal to the number of desired classes which are in our case road and not-road. 
 Through skip connections, by performing 1x1 convolutions on previous VGG layers (layer 3, layer 4) and adding them element-wise to upsampled (transposed convolution) lower-level layers, the perfomance of the model was improved. This architecture was good enough to find free space on the road.
