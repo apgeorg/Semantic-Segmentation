@@ -1,6 +1,11 @@
 [fcn]: ./images/fcn_segmentation.png "Structure of a Fully Convolutional Network Architecture" 
 [loss20]: ./images/loss_ep20.png "Loss Curvature (epochs 20)" 
-[loss40]: ./images/loss_ep40.png "Loss Curvature (epochs 20)" 
+[loss40]: ./images/loss_ep40.png "Loss Curvature (epochs 40)"
+[road1]: ./images/um_000015.png "Road 1" 
+[road2]: ./images/um_000031.png "Road 2" 
+[road3]: ./images/um_000086.png "Road 3"  
+[road4]: ./images/umm_000038.png "Road 4"  
+[road5]: ./images/uu_000063.png "Road 5"  
 
 # Semantic Segmentation
 
@@ -13,8 +18,9 @@ The model architecture is based on [1] (see figure below) which is an proven arc
 
 ![Structure of a Fully Convolutional Network Architecture][fcn]
 
-For our model a pre-trained VGG16 network was converted to a FCN by converting the final fully connected layer to a 1x1 convolution and setting the depth equal to the number of desired classes (road and not-road). 
-Performance is improved through the use of skip connections, performing 1x1 convolutions on previous VGG layers (layers 3 and 4) and adding them element-wise to upsampled (through transposed convolution) lower-level layers 
+A pre-trained VGG16 network was converted to a FCN by converting the final fully connected layer to a 1x1 convolution and setting the depth equal to the number of desired classes which are in our case road and not-road. 
+Through skip connections, by performing 1x1 convolutions on previous VGG layers (layer 3, layer 4) and adding them element-wise to upsampled (transposed convolution) lower-level layers, the perfomance of the model is improved. 
+
 (i.e. the 1x1-convolved layer 7 is upsampled before being added to the 1x1-convolved layer 4). 
 
 ## Training
@@ -33,7 +39,11 @@ As we can see, the loss is below XY after 20 epochs and XY after 40 epochs which
 
 Below are a few sample images from the output of the FCN, with the segmentation class overlaid upon the original image in green.
 
-TODO: IMAGES 
+![Road 1][road1]
+![Road 2][road2]
+![Road 3][road3]
+![Road 4][road4]
+![Road 5][road5]
 
 ## Setup
 
