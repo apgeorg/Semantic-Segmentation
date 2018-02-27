@@ -14,14 +14,13 @@ learn to dense predictions for pixel-wise tasks like semantic segmentation.
 
 ## Model Architecture 
 
-The model architecture is based on [1] (see figure below) which is an proven architecture for semantic segmentation. These architecture was good enough to find free space on the road. 
+The model architecture is based on [1] (see figure below) which is an proven architecture for semantic segmentation. 
 
 ![Structure of a Fully Convolutional Network Architecture][fcn]
 
 A pre-trained VGG16 network was converted to a FCN by converting the final fully connected layer to a 1x1 convolution and setting the depth equal to the number of desired classes which are in our case road and not-road. 
-Through skip connections, by performing 1x1 convolutions on previous VGG layers (layer 3, layer 4) and adding them element-wise to upsampled (transposed convolution) lower-level layers, the perfomance of the model is improved. 
-
-(i.e. the 1x1-convolved layer 7 is upsampled before being added to the 1x1-convolved layer 4). 
+Through skip connections, by performing 1x1 convolutions on previous VGG layers (layer 3, layer 4) and adding them element-wise to upsampled (transposed convolution) lower-level layers, the perfomance of the model was improved. 
+These architecture was good enough to find free space on the road.
 
 ## Training
 
@@ -31,7 +30,7 @@ The weights were initialized randomly. The network was trained for 20 epochs. Th
 ![Loss over 20 epochs][loss20]
 
 The final approach uses a batch size of 5 images and the model was trained on 40 epochs. 
-As we can see, the loss is below XY after 20 epochs and XY after 40 epochs which is a pretty good result.  
+As we can see, the average loss is below 0.19 after 20 epochs and 0.05 after 40 epochs which is a pretty good result.  
 
 ![Loss over 40 epochs][loss40]
 
